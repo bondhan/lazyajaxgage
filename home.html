@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Test Async Gauge</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <script src="./scripts/jquery/jquery-1.11.1.js"></script>
+    <script src="./scripts/jquery/jquery-ui.js"></script>
+    <script src="./scripts/jquery/modernizr.min.js"></script>
+    <script src="./scripts/jquery/justgage/raphael-2.1.4.min.js"></script>
+    <script src="./scripts/jquery/justgage/justgage.js"></script>
+    <script>
+        $(document).ready(function () {
+            console.log("ready..")
+
+            // $('#loading-image').show();
+            function updateGage(url, g) {
+                $.ajax({
+                    type: 'GET',
+                    url: url,
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log("updating " + data)
+                        g.refresh(data.value)
+                    },
+                    // complete: function () {
+                    //     $('#loading-image').hide();
+                    // }
+                });
+            };
+
+            var g1 = new JustGage({
+                id: "gauge1",
+                value: 0,
+                min: 0,
+                max: 100,
+                title: "satu"
+            });
+
+            var g2 = new JustGage({
+                id: "gauge2",
+                value: 0,
+                min: 0,
+                max: 100,
+                title: "dua"
+            });
+
+            var g3 = new JustGage({
+                id: "gauge3",
+                value: 0,
+                min: 0,
+                max: 100,
+                title: "tiga"
+            });
+
+            updateGage("http://localhost:1323/g1", g1)
+            updateGage("http://localhost:1323/g2", g2)
+            updateGage("http://localhost:1323/g3", g3)
+
+        });
+
+    </script>
+</head>
+
+<body>
+    <div id="gauge1" class="200x160px"></div>
+    <div id="gauge2" class="200x160px"></div>
+    <div id="gauge3" class="200x160px"></div>
+    <div id="text"></div>
+    <!-- <div id="loading-image">
+        <img id="loading-image" src="img/loading.gif" alt="Loading..." />
+    </div> -->
+</body>
+
+</html>
