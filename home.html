@@ -6,7 +6,7 @@
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <title>Test Async Gauge</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='css/stylesheet.css'>
     <script src="./scripts/jquery/jquery-1.11.1.js"></script>
     <script src="./scripts/jquery/jquery-ui.js"></script>
     <script src="./scripts/jquery/modernizr.min.js"></script>
@@ -17,18 +17,25 @@
             console.log("ready..")
 
             // $('#loading-image').show();
-            function updateGage(url, g) {
+            function updateGage(gagename, loadername, url, g) {
                 $.ajax({
                     type: 'GET',
                     url: url,
                     dataType: 'json',
+                    beforeSend: function () {
+                        console.log("showing" + loadername)
+                        $(loadername).show()
+                        $(gagename).hide()
+                    },
                     success: function (data) {
                         console.log("updating " + data)
                         g.refresh(data.value)
                     },
-                    // complete: function () {
-                    //     $('#loading-image').hide();
-                    // }
+                    complete: function () {
+                        // $('#loading-image').hide();
+                        $(loadername).hide()
+                        $(gagename).show()
+                    }
                 });
             };
 
@@ -56,9 +63,9 @@
                 title: "tiga"
             });
 
-            updateGage("http://localhost:1323/g1", g1)
-            updateGage("http://localhost:1323/g2", g2)
-            updateGage("http://localhost:1323/g3", g3)
+            updateGage("#gauge1", "#loader1", "http://localhost:1323/g1", g1)
+            updateGage("#gauge2", "#loader2", "http://localhost:1323/g2", g2)
+            updateGage("#gauge3", "#loader3", "http://localhost:1323/g3", g3)
 
         });
 
@@ -66,13 +73,30 @@
 </head>
 
 <body>
-    <div id="gauge1" class="200x160px"></div>
-    <div id="gauge2" class="200x160px"></div>
-    <div id="gauge3" class="200x160px"></div>
-    <div id="text"></div>
-    <!-- <div id="loading-image">
-        <img id="loading-image" src="img/loading.gif" alt="Loading..." />
-    </div> -->
+    <div>
+        <div id='loader1' class="gage" style='display: none;'>
+            <img src='img/spinner.gif' width='200px' height='160px'>
+        </div>
+        <div id="gauge1" class="gage"></div>
+    </div>
+
+    <div>
+        <div id='loader2' class="gage" style='display: none;'>
+            <img src='img/spinner.gif' width='200px' height='160px'>
+        </div>
+        <div id="gauge2" class="gage"></div>
+    </div>
+
+
+    <div>
+        <div id='loader3' class="gage" style='display: none;'>
+            <img src='img/spinner.gif' width='200px' height='160px'>
+        </div>
+        <div id="gauge3" class="gage"></div>
+    </div>
+
+
+
 </body>
 
 </html>
